@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: icp-web
+  labels:
+    app: icp-web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: icp-web
+    spec:
+      containers:
+      - name: icp-web
+        image: 3.3.3.122/test/icp_web:6.0
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: harhor-m2-2

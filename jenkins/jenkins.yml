@@ -1,0 +1,48 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: jenkins
+  namespace: kube-system
+spec:
+  serviceName: jenkins
+  replicas: 1
+  volumeClaimTemplates:
+  - metadata:
+      name: ci
+      annotations:
+        volume.beta.kubernetes.io/storage-class: fast
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  template:
+    metadata:
+      labels:
+        k8s-app: jenkins
+    spec:
+      serviceAccountName: jenkins
+      containers:
+      - name: jenkins
+        image: registry.cn-hangzhou.aliyuncs.com/spacexnice/jenkins:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: "/var/jenkins_home"
+          name: ci
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-svc
+  namespace: kube-system
+spec:
+  ports:
+  - port: 8089
+    targetPort: 8080
+    name: web
+  - port: 50000
+    targetPort: 50000
+    name: slave
+  selector:
+    k8s-app: jenkins
+  type: NodePort

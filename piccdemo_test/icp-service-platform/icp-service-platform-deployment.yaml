@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: icp-service-platform
+  labels:
+    app: icp-service-platform
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: icp-service-platform
+    spec:
+      containers:
+      - name: icp-service-platform
+        image: 3.3.3.122/test/icp_service_platform:2.0
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: icp-service-platfrom
+          mountPath: /usr/local/tomcat/conf/Catalina/localhost
+      volumes:
+      - name: icp-service-platfrom
+        configMap:
+          name: icp-service-platfrom
+      imagePullSecrets:
+      - name: harhor-m2-2

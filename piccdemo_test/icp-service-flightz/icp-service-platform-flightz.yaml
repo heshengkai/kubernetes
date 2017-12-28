@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: icp-service-flightz
+  labels:
+    app: icp-service-flightz
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: icp-service-flightz
+    spec:
+      containers:
+      - name: icp-service-flightz
+        image: 3.3.3.122/test/icp_service_flightz:5.0
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: icp-service-flightz
+          mountPath: /usr/local/tomcat/conf/Catalina/localhost
+      volumes:
+      - name: icp-service-flightz
+        configMap:
+          name: icp-service-flightz
+      imagePullSecrets:
+      - name: harhor-m2-2

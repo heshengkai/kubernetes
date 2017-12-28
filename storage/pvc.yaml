@@ -1,0 +1,21 @@
+{
+  "kind": "PersistentVolumeClaim",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "heshengkai",
+    "namespace": "kube-system",
+    "annotations": {
+        "volume.beta.kubernetes.io/storage-class": "fast"
+    }
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "1Gi"
+      }
+    }
+  }
+}

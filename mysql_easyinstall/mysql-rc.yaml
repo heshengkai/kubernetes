@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ReplicationController 
+metadata: 
+  name: my-mysql-v1 
+  namespace: default 
+  labels: 
+    name: my-mysql 
+    version: v1 
+spec: 
+  replicas: 1 
+  selector: 
+    name: my-mysql 
+    version: v1 
+  template: 
+    metadata: 
+      labels: 
+        name: my-mysql 
+        version: v1 
+    spec: 
+      containers: 
+        - image: index.tenxcloud.com/tenxcloud/mysql
+          name: my-mysql-v1 
+          ports: 
+            - containerPort: 3306 
+          env: 
+            - name: MYSQL_ROOT_PASSWORD 
+              value: abcd123 
+          volumeMounts: 
+            - name: mysql-storage 
+              mountPath: /var/lib/mysql
+            - name: icp-mysql-config-vol
+              mountPath: /etc/mysql/conf.d
+      volumes: 
+        - name: mysql-storage 
+          hostPath: 
+            path: /data/mysql1
+        - name: icp-mysql-config-vol
+          configMap:
+            name: icp-mysql-config-vol                                        
+      nodeSelector:
+        points: "3.3.3.125"

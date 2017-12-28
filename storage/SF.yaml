@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: web
+  namespace: kube-system
+spec:
+  serviceName: "nginx01"
+  replicas: 3
+  volumeClaimTemplates:
+  - metadata:
+      name: test 
+      annotations:
+        volume.beta.kubernetes.io/storage-class: fast
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 0.5Gi 
+  template:
+    metadata:
+      labels:
+        app: nginx01
+    spec:
+      containers:
+      - name: hsk
+        image: nginx:1.11.10
+        volumeMounts:
+        - mountPath: "/mnt/rdb"
+          name: test
